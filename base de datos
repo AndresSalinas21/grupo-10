@@ -1,0 +1,114 @@
+import psutil
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import mysql.connector
+from datetime import datetime
+
+# Configuración de la conexión MySQL
+conexion_mysql = mysql.connector.connect(
+    host="tu_host_mysql",
+    MYSQL_USER  =  "vasalinas21@gmail.com"
+MYSQL_PASSWORD  =  "Andres-12345"
+MYSQL_DATABASE  =  "base-datos"
+)
+cursor = conexion_mysql.cursor()
+
+# Función para obtener el rendimiento del sistema
+def obtener_rendimiento():
+    cpu_percent = psutil.cpu_percent()
+    memory_percent = psutil.virtual_memory().percent
+    return cpu_percent, memory_percent
+
+
+# Función para guardar el rendimiento en la base de datos
+def guardar_en_bd(rendimiento):
+    # Obtener la fecha y hora actual
+    fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    # Insertar los datos de rendimiento en la base de datos
+    consulta_sql = "INSERT INTO rendimiento (fecha_hora, uso_cpu, uso_memoria) VALUES (%s, %s, %s)"
+    datos = (fecha_actual, rendimiento[0], rendimiento[1])
+    cursor.execute(consulta_sql, datos)
+    conexion_mysql.commit()
+
+    print("Datos de rendimiento guardados en la base de datos.")
+
+def main():
+    # Obtener el rendimiento del sistema
+    rendimiento = obtener_rendimiento()
+
+    # Enviar correo electrónico con el rendimiento
+    enviar_correo(rendimiento)
+    # Configuración del cliente MQTT
+cliente = mqtt.Cliente()
+cliente . on_connect  =  on_connect
+cliente . on_message  =  on_message
+
+mientras que Verdadero:
+    # Obtener la cantidad de memoria disponible para la máquina local
+    memoria_disponible_local = ronda(psutil.memoria_virtual().disponible / (1024 * 1024), 2)
+    memoria_usada_local = round(psutil.virtual_memory().porcentaje, 2)
+    rendimiento_red_local  =  round ( psutil . net_io_counters (). bytes_sent  / ( 1024  *  1024 ), 2 )
+
+    # Obtener el ID de la computadora local
+    id_computadora_local = plataforma.nodo()
+
+    # Actualizar los datos de la máquina local
+    datos_maquina_local  = {
+        "mensaje_maquina": "Máquina 2",
+        "id_computadora" : id_computadora_local ,
+        "memoria_disponible" : memoria_disponible_local ,
+        "memoria_usada" : memoria_usada_local ,
+        "rendimiento_red" : rendimiento_red_local
+    }
+
+    # Convertir el diccionario a una cadena JSON
+    mensaje_json_local  =  json . volcados ( datos_maquina_local )
+
+    # Insertar los datos de la máquina local en la base de datos MySQL
+    cursor_mysql.execute('''INSERTAR EN datos_mqtt
+                      (mensaje_maquina, id_computadora, memoria_disponible, memoria_usada, rendimiento_red)
+                      VALORES (%s, %s, %s, %s, %s)''',
+                    ( datos_maquina_local [ "mensaje_maquina" ], datos_maquina_local [ "id_computadora" ],
+                     datos_maquina_local [ "memoria_disponible" ], datos_maquina_local [ "memoria_usada" ],
+                     datos_maquina_local [ "rendimiento_red" ]))
+    conexión_mysql . comprometerse ()
+
+    # Publicar el mensaje JSON en el tema MQTT
+    cliente . publicar ( MQTT_TOPIC , mensaje_json_local )
+
+    # Imprimir los datos de la máquina local
+    imprimir ( "Maquina 2 (Local)" )
+    imprimir ( mensaje_json_local )
+
+    # Esperar segundos antes de la próxima actualización
+    tiempo . dormir ( 5 )
+
+    # Actualizar los datos de la máquina remota si están disponibles
+    si  datos_maquina_remota :
+        # Insertar los datos de la máquina remota en la base de datos MySQL
+        cursor_mysql . ejecutar ( '''INSERT INTO datos_mqtt
+                          (mensaje_maquina, id_computadora, memoria_disponible, memoria_usada, rendimiento_red)
+                          VALORES (%s, %s, %s, %s, %s)''' ,
+                        ( datos_maquina_remota [ "mensaje_maquina" ], datos_maquina_remota [ "id_computadora" ],
+                         datos_maquina_remota [ "memoria_disponible" ], datos_maquina_remota [ "memoria_usada" ],
+                         datos_maquina_remota [ "rendimiento_red" ]))
+        conexión_mysql . comprometerse ()
+
+        # Imprimir los datos de la máquina remota
+        print ( "Maquina 1 (Remota)" )
+        print ( f"ID: { datos_maquina_remota [ 'id_computadora' ] } , Memoria disponible: { datos_maquina_remota [ 'memoria_disponible' ] } , Memoria usada: { datos_maquina_remota [ 'memoria_usada' ] } , Rendimiento de red: { datos_maquina_remota [ 'rendimiento_red' ] } " )
+
+    # Esperar segundos antes de la próxima actualización
+    tiempo . dormir ( 5 )
+
+# Cerrar la conexión con la base de datos MySQL al finalizar
+conexión_mysql . cerca ()
+
+    # Guardar el rendimiento en la base de datos
+    guardar_en_bd(rendimiento)
+
+if __name__ == "__main__":
+    main()
+    
